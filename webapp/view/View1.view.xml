@@ -1,0 +1,126 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form" xmlns:semantic="sap.m.semantic"
+	xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="browseorders.BrowseOrders.controller.View1" displayBlock="true">
+	<Shell id="shell">
+		<App id="app">
+			<SplitContainer>
+				<masterPages>
+					<semantic:MasterPage id="masterTitle" title="">
+						<semantic:content>
+							<SearchField placeholder="Search by Order ID" id="field1" liveChange="onSearch" showRefreshButton="true"/>
+							<List id="idList" items="{path : '/orders'}">
+								<items>
+									<ObjectListItem title="Order {orderid}" type="Active" press="onListItemPress"
+										number="{ path:'ordered', type: 'sap.ui.model.type.Date', formatOptions: {style: 'short', source:{pattern: 'yyyy/MM/dd'}} }">
+										<firstStatus>
+											<ObjectStatus id="status" text="{status}" state="{= ${status} === 'In time' ? 'Success' : ${status} === 'Urgent'?'Warning': 'Error'}"/>
+										</firstStatus>
+										<ObjectAttribute text="{customer}"/>
+										<ObjectAttribute text="Shipped: {path:'shipped', type: 'sap.ui.model.type.Date', formatOptions: {style: 'medium', source:{pattern: 'yyyy/MM/dd'}}}"/>
+									</ObjectListItem>
+								</items>
+							</List>
+						</semantic:content>
+					</semantic:MasterPage>
+				</masterPages>
+				<detailPages>
+					<semantic:DetailPage id="dp" title="Order" visible="false">
+						<ObjectHeader id="detailPage" title="Order {orderid}"
+							number="{ parts:[{path:'price'},{path:'currency'}], type: 'sap.ui.model.type.Currency', formatOptions: {showMeasure: false} }"
+							numberUnit="{currency}">
+							<attributes>
+								<ObjectAttribute id="customer" text="Customer: {customer}"/>
+								<ObjectAttribute id="ordered" text="Ordered: {path:'ordered', type: 'sap.ui.model.type.Date', formatOptions: {style: 'medium', source:{pattern: 'yyyy/MM/dd'}}}"/>
+								<ObjectAttribute id="shipped" text="Shipped: {path:'shipped', type: 'sap.ui.model.type.Date', formatOptions: {style: 'medium', source:{pattern: 'yyyy/MM/dd'}}}"/>
+							</attributes>
+						</ObjectHeader>
+						<IconTabBar id="idIconTabBarMulti" expanded="{device>/isNoPhone}" class="sapUiResponsiveContentPadding">
+							<items>
+								<IconTabFilter icon="sap-icon://shipping-status">
+									<VBox class="sapUiSmallMargin">
+										<f:SimpleForm id="SimpleFormDisplay354" editable="false" layout="ResponsiveGridLayout" title="Shipping Address" labelSpanXL="3" labelSpanL="5" labelSpanM="5" labelSpanS="2" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="2" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="2" columnsM="2" singleContainerFullSize="false">
+											<f:content>
+												<Label text="Name"/>
+												<Text id="nameText" text="{shipName}"/>
+												<Label text="Street"/>
+												<Text text="{street}"/>
+											
+												<Label text="ZIP Code/City"/>
+												<Text text="{zipcode}"/>
+												<Label text="Region"/>
+												<Text text="{region}"/>
+												<Label text="Country"/>
+												<Text text="{country}"/>
+											</f:content>
+										</f:SimpleForm>
+									</VBox>
+								</IconTabFilter>
+								<IconTabFilter icon="sap-icon://employee">
+									<VBox class="sapUiSmallMargin">
+										<f:SimpleForm editable="false" layout="ResponsiveGridLayout" title="Processor Information" labelSpanXL="3"
+											labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="4" emptySpanL="4" emptySpanM="4" emptySpanS="0"
+											columnsXL="2" columnsL="2" columnsM="2" singleContainerFullSize="false">
+											<f:content>
+												<core:Title text="Details" level="H5"/>
+												<Label text="Name"/>
+												<Text text="{processorName}"/>
+												<Label text="Employee ID"/>
+												<Text text="{employeeid}"/>
+											
+												<Label text="Job Title"/>
+												<Text text="{jobTitle}"/>
+												<Label text="Phone"/>
+												<Text text="{phone}"/>
+												<core:Title text="Picture" level="H5"/>
+												<Image src="images/{photo}" width="100px" />
+											</f:content>
+											
+										</f:SimpleForm>
+									</VBox>
+								</IconTabFilter>
+							</items>
+						</IconTabBar>
+						<Table id="idProductsTable" items="{products}" class="sapUiResponsiveContentPadding">
+							<headerToolbar>
+								<OverflowToolbar>
+									<content>
+										<Title id="tableTitle" level="H2"/>
+										<ToolbarSpacer/>
+									</content>
+								</OverflowToolbar>
+							</headerToolbar>
+							<columns>
+								<Column width="12em">
+									<Text text="Product"/>
+								</Column>
+								<Column minScreenWidth="Tablet" demandPopin="true">
+									<Text text="Unit Price"/>
+								</Column>
+								<Column minScreenWidth="Desktop" demandPopin="true" hAlign="End">
+									<Text text="Quantity"/>
+								</Column>
+								<Column minScreenWidth="Desktop" demandPopin="true" hAlign="Center">
+									<Text text="Total"/>
+								</Column>
+							</columns>
+							<items>
+								<ColumnListItem>
+									<cells>
+										<ObjectIdentifier title="{name}"/>
+										<ObjectNumber id="yourprice"
+											number="{ parts:[{path:'price'},{path:'currency'}], type: 'sap.ui.model.type.Currency', formatOptions: {showMeasure: false} }"
+											unit="{currency}"/>
+										<Text text="{quantity}"/>
+										
+										<ObjectNumber id="total"
+											number="{= ${price}*${quantity}}"
+											unit="{currency}"/>
+									</cells>
+								</ColumnListItem>
+							</items>
+						</Table>
+					</semantic:DetailPage>
+				</detailPages>
+			</SplitContainer>
+		</App>
+	</Shell>
+</mvc:View>
